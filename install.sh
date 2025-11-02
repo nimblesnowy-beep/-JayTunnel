@@ -196,14 +196,15 @@ EOF
 configure_domain_ssl() {
     read -rp "Masukkan domain anda (A record ke IP server): " DOMAIN
     echo "$DOMAIN" > "$DOMAIN_FILE"
-    curl https://get.acme.sh | sh >/dev/null 2>&1
-    ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-    ~/.acme.sh/acme.sh --issue --standalone -d "$DOMAIN" --force
-    mkdir -p "$INSTALL_DIR"
-    ~/.acme.sh/acme.sh --install-cert -d "$DOMAIN" \
-        --key-file "$INSTALL_DIR/jay-tunnel.key" \
-        --fullchain-file "$INSTALL_DIR/jay-tunnel.crt"
-    chmod 600 "$INSTALL_DIR/jay-tunnel.key" "$INSTALL_DIR/jay-tunnel.crt"
+    curl https://get.acme.sh | sh >/dev/null 2>&1                # line 260
+~/.acme.sh/acme.sh --set-default-ca --server letsencrypt    # line 261
+WEBROOT="/var/www/html"                                      # line 262 (baru)
+mkdir -p "$WEBROOT"                                         # line 263 (baru)
+~/.acme.sh/acme.sh --issue -d "$DOMAIN" -w "$WEBROOT" --force # line 264 (ganti baris 263)
+~/.acme.sh/acme.sh --install-cert -d "$DOMAIN" \
+    --key-file "$INSTALL_DIR/jay-tunnel.key" \
+    --fullchain-file "$INSTALL_DIR/jay-tunnel.crt"          # line 265–267
+chmod 600 "$INSTALL_DIR/jay-tunnel.key" "$INSTALL_DIR/jay-tunnel.crt" # line 268
     echo "[OK] SSL issued and installed for $DOMAIN."
 }
 
