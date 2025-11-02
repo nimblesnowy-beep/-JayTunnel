@@ -2,7 +2,7 @@
 # ⚡ Jay Tunnel - XRAY REALITY + NGINX + SSL + TELEGRAM AUTO-INSTALLER
 # Compatible: Ubuntu 22.04+, Debian 11+
 # Author: YourName <your_github>
-# Repo: https://github.com/<username>/<repo>
+# Repo: https://github.com/nimblesnowy-beep/-JayTunnel
 # Versi: 1.0
 
 set -Eeuo pipefail
@@ -14,7 +14,7 @@ FLAG_FILE="$INSTALL_DIR/.installed"
 DOMAIN_FILE="$INSTALL_DIR/domain"
 ENV_FILE="$INSTALL_DIR/.env"
 ERROR_LOG="$LOG_DIR/installer_error.log"
-SCRIPT_REPO="https://github.com/<username>/<repo>.git"
+SCRIPT_REPO="https://github.com/nimblesnowy-beep/-JayTunnel.git"
 
 # --- Helper Functions ---
 error_log() {
@@ -25,8 +25,9 @@ trap 'error_log "Error on line $LINENO: $BASH_COMMAND"' ERR
 spinner() {
     local pid=$!
     local spin='-\|/'
+    local i=0
     while kill -0 $pid 2>/dev/null; do
-        local i=$(( (i+1) %4 ))
+        i=$(( (i+1) %4 ))
         printf "\r[%c] $1" "${spin:$i:1}"
         sleep 0.1
     done
@@ -223,7 +224,7 @@ update_script() {
     else
         cd /opt/jay-tunnel && git pull
     fi
-    cp /opt/jay-tunnel/jay-tunnel-installer.sh /usr/local/bin/jay-tunnel-installer.sh
+    cp /opt/jay-tunnel/install.sh /usr/local/bin/jay-tunnel-installer.sh
     chmod +x /usr/local/bin/jay-tunnel-installer.sh
     echo "[OK] Script updated."
 }
